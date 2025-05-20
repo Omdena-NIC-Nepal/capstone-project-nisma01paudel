@@ -192,8 +192,8 @@ The dashboard is deployed using **Streamlit** for interactive visualizations. It
 
 ## 📝 Author
 
-- [Your Name](https://www.linkedin.com/in/your-profile/)  
-- [GitHub Repository](https://github.com/your-repository-url)  
+- [Nisma Paudel](https://www.linkedin.com/in/paudelnisma/)  
+- [GitHub Repository](https://github.com/Omdena-NIC-Nepal/capstone-project-nisma01paudel)  
 
 ---
 
