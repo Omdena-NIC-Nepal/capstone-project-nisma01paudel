@@ -1,9 +1,17 @@
 import streamlit as st
 import spacy
+import subprocess
+import importlib.util
 from textblob import TextBlob
 import random
 
-# Load spaCy model once outside the button for efficiency
+# Automatically download the spaCy model if not installed
+def ensure_spacy_model():
+    model_name = "en_core_web_sm"
+    if not importlib.util.find_spec(model_name):
+        subprocess.run(["python", "-m", "spacy", "download", model_name], check=True)
+
+ensure_spacy_model()
 nlp = spacy.load("en_core_web_sm")
 
 def display():
