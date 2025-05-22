@@ -1,5 +1,3 @@
---prefer-binary
-
 # Core UI and Data Libraries
 streamlit>=1.30
 pandas>=1.5
