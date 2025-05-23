@@ -1,19 +1,33 @@
 import streamlit as st
-from scripts.data_utils import load_data
+from scripts.data_utils import load_data, sanitize_for_arrow
 
 def display():
-    st.subheader("Data Preview")
+    st.title("📈 Agricultural and Rural Development Data Overview")
 
+    st.subheader("🔍 Data Preview")
+
+    # Load and sanitize data if not already in session state
     if "agriculture_df" not in st.session_state:
-        agriculture_df = load_data("data/agricultural_data/agriculture-and-rural-development_npl.csv",skiprows=[1])
-        st.session_state.agriculture_df = agriculture_df
+        agriculture_df = load_data(
+            "data/agricultural_data/agriculture-and-rural-development_npl.csv",
+            skiprows=[1]
+        )
+        if agriculture_df is not None:
+            agriculture_df = sanitize_for_arrow(agriculture_df)
+            st.session_state.agriculture_df = agriculture_df
+        else:
+            st.warning("Failed to load agricultural data.")
+            return
 
+    # Retrieve from session
     agriculture_df = st.session_state.agriculture_df
 
+    # Display a preview of the data
     st.dataframe(agriculture_df, height=200)
 
     st.divider()
 
+    # Markdown explanation of dataset
     st.markdown("""
     ## 📊 Dataset Overview: Agricultural and Rural Development Data
 
@@ -55,6 +69,6 @@ def display():
     - Comparing development indicators across countries
     - Predictive modeling on agri-development metrics
     - Correlation and policy evaluation studies
-
     """)
+
     st.divider()
