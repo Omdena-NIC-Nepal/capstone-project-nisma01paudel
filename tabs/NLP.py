@@ -1,18 +1,14 @@
 import streamlit as st
 import spacy
-import subprocess
-import importlib.util
 from textblob import TextBlob
 import random
 
-# Automatically download the spaCy model if not installed
-def ensure_spacy_model():
-    model_name = "en_core_web_sm"
-    if not importlib.util.find_spec(model_name):
-        subprocess.run(["python", "-m", "spacy", "download", model_name], check=True)
-
-ensure_spacy_model()
-nlp = spacy.load("en_core_web_sm")
+# Load the spaCy model (assumes it's pre-installed via requirements.txt)
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    st.error("spaCy model 'en_core_web_sm' is not installed. Please ensure it's listed in requirements.txt.")
+    st.stop()
 
 def display():
     # Page Title
