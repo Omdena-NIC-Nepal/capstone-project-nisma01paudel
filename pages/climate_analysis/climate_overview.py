@@ -18,6 +18,10 @@ def display():
             return
 
     cleaned_climatedf = st.session_state.cleaned_climatedf
+    
+    if cleaned_climatedf.empty:
+        st.warning("Climate dataset is empty after cleaning.")
+        return
 
     st.dataframe(cleaned_climatedf, height=200)
 
