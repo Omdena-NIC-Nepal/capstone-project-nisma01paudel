@@ -1,60 +1,65 @@
 import streamlit as st
-from scripts.data_utils import load_data, remove_unwanted_columns, clean_data
+from scripts.data_utils import load_data, clean_data, sanitize_for_arrow
 
 def display():
-    st.subheader("Data Preview")
+    st.title("🌤️ Nepal Climate Data Overview")
+    
+    st.subheader("🔍 Data Preview")
 
     # Load and preprocess the dataset if not already loaded
     if "cleaned_climatedf" not in st.session_state:
         climatedf = load_data("data/climate_data/climate_data_nepal_district_wise_monthly.csv")
-        cleaned_climatedf = clean_data(climatedf, method='dropna')
-        st.session_state.cleaned_climatedf = cleaned_climatedf
+        if climatedf is not None:
+            cleaned_climatedf = clean_data(climatedf, method='dropna')
+            cleaned_climatedf = sanitize_for_arrow(cleaned_climatedf)
+            st.session_state.cleaned_climatedf = cleaned_climatedf
+        else:
+            st.warning("Failed to load climate data.")
+            return
 
     cleaned_climatedf = st.session_state.cleaned_climatedf
+
     st.dataframe(cleaned_climatedf, height=200)
 
     st.divider()
 
     st.markdown("""
-    This dataset captures **monthly climate statistics** across various districts in **Nepal**, with measurements recorded from **1981 onwards**. Below is a description of each feature:
+    ## 🌍 Climate Dataset Description: Nepal District-wise Monthly Data
+
+    This dataset captures **monthly climate statistics** across various districts in **Nepal**, with records starting from **1981**. Below is a feature breakdown:
 
     ### 📅 Temporal Columns
-    - **DATE**: Specific day of data recording (e.g., "1/31/1981")
-    - **YEAR, MONTH**: Extracted from `DATE`, useful for trend analysis over time
+    - `DATE`: Full date (e.g., "1/31/1981")
+    - `YEAR`, `MONTH`: Extracted components for easier analysis
 
-    ### 📍 Geographical Data
-    - **DISTRICT**: Name of the district where data was recorded
-    - **LAT, LON**: Latitude and longitude coordinates of the district location
+    ### 📍 Geographic Features
+    - `DISTRICT`: District name
+    - `LAT`, `LON`: Latitude and Longitude
 
     ### 🌧️ Precipitation and Pressure
-    - **PRECTOT**: Total monthly precipitation in millimeters
-    - **PS**: Surface atmospheric pressure in kilopascals (kPa)
+    - `PRECTOT`: Total precipitation (mm)
+    - `PS`: Surface pressure (kPa)
 
-    ### 💧 Humidity and Moisture
-    - **QV2M**: Specific humidity at 2 meters (grams of water vapor per kg of air)
-    - **RH2M**: Relative humidity at 2 meters (percentage)
+    ### 💧 Humidity & Moisture
+    - `QV2M`: Specific humidity at 2m (g/kg)
+    - `RH2M`: Relative humidity at 2m (%)
 
-    ### 🌡️ Temperature Measures
-    - **T2M**: Mean air temperature at 2 meters
-    - **T2MWET**: Wet bulb temperature at 2 meters
-    - **T2M_MAX / T2M_MIN**: Max and Min air temperature at 2 meters
-    - **T2M_RANGE**: Temperature range (max - min)
-    - **TS**: Surface skin temperature
+    ### 🌡️ Temperature Metrics
+    - `T2M`, `T2MWET`: Mean and wet bulb temperature
+    - `T2M_MAX`, `T2M_MIN`: Max/Min temperature at 2m
+    - `T2M_RANGE`: Temp range (max - min)
+    - `TS`: Surface skin temperature
 
-    ### 🌬️ Wind Speed Metrics
-    - **WS10M / WS50M**: Mean wind speed at 10m and 50m height
-    - **WS10M_MAX / WS50M_MAX**: Max wind speed at 10m and 50m
-    - **WS10M_MIN / WS50M_MIN**: Min wind speed at 10m and 50m
-    - **WS10M_RANGE / WS50M_RANGE**: Wind speed range at both heights
+    ### 🌬️ Wind Speeds
+    - `WS10M`, `WS50M`: Mean wind speeds
+    - `WS10M_MAX/MIN/RANGE`, `WS50M_MAX/MIN/RANGE`: Wind speed stats at both heights
 
     ---
 
-    This structured meteorological dataset supports comprehensive climate research and modeling, particularly:
-    - Identifying climate change patterns
-    - Studying extreme weather events
-    - Performing district-level comparative climate analysis
-
-    Use the interactive features to visualize and explore how climate factors vary across space and time in Nepal. 🌿
+    ### ✅ Use Cases:
+    - Climate trend analysis
+    - Extreme weather event studies
+    - District-wise climate comparison
     """)
 
     st.divider()
