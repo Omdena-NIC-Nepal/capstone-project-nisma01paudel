@@ -1,12 +1,20 @@
 import streamlit as st
-from scripts.data_utils import load_data, sanitize_for_arrow
+from scripts.data_utils import load_data
+
+def sanitize_for_arrow(df):
+    """
+    Convert all object-type columns to string to avoid Arrow serialization errors.
+    """
+    for col in df.columns:
+        if df[col].dtype == 'O':  # Object dtype
+            df[col] = df[col].astype(str)
+    return df
 
 def display():
     st.title("📈 Agricultural and Rural Development Data Overview")
 
     st.subheader("🔍 Data Preview")
 
-    # Load and sanitize data if not already in session state
     if "agriculture_df" not in st.session_state:
         agriculture_df = load_data(
             "data/agricultural_data/agriculture-and-rural-development_npl.csv",
@@ -19,15 +27,12 @@ def display():
             st.warning("Failed to load agricultural data.")
             return
 
-    # Retrieve from session
     agriculture_df = st.session_state.agriculture_df
 
-    # Display a preview of the data
     st.dataframe(agriculture_df, height=200)
 
     st.divider()
 
-    # Markdown explanation of dataset
     st.markdown("""
     ## 📊 Dataset Overview: Agricultural and Rural Development Data
 
