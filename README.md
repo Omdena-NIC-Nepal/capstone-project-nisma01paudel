@@ -3,6 +3,8 @@
 **Omdena Batch II Capstone Project**  
 *By Nisma Paudel*  
 
+🔗 **Live Dashboard**: [Streamlit App](https://capstone-project-nisma01paudel33.streamlit.app/)
+
 ---
 
 ### Project Overview  
