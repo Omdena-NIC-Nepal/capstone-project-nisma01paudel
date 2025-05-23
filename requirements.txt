@@ -13,4 +13,5 @@ geopandas>=0.12
 
 # NLP
 textblob
-spacy==3.7.2
+
+
