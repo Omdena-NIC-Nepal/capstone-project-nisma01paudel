@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import geopandas as gpd
 import folium
+import pandas.api.types as ptypes
 
 @st.cache_data
 def load_data(file: str, **kwargs) -> pd.DataFrame | None:
@@ -47,7 +48,8 @@ def sanitize_for_arrow(df: pd.DataFrame) -> pd.DataFrame:
     Convert object columns in the DataFrame to strings to avoid PyArrow conversion errors
     when using functions like `pa.Table.from_pandas()`.
     """
+    df = df.copy()
     for col in df.columns:
-        if df[col].dtype == 'object':
+        if ptypes.is_object_dtype(df[col]):
             df[col] = df[col].astype(str)
     return df
