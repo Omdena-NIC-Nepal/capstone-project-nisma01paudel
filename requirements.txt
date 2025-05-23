@@ -4,8 +4,8 @@ pandas>=1.5
 numpy>=1.22
 scikit-learn>=1.2
 matplotlib>=3.5
-plotly
 seaborn
+plotly
 
 # Mapping and Geospatial
 folium>=0.14
@@ -14,5 +14,3 @@ geopandas>=0.12
 
 # NLP (simpler alternative to spaCy)
 textblob
-
-
